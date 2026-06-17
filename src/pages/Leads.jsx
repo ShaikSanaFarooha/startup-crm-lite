@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Search, Filter, Plus, LayoutGrid, List, X } from 'lucide-react';
+import { Plus, LayoutGrid, List, X } from 'lucide-react';
 import LeadForm from '../components/leads/LeadForm';
 import LeadCard from '../components/leads/LeadCard';
 import LeadTable from '../components/leads/LeadTable';
+import SearchBar from '../components/common/SearchBar';
+import FilterBar from '../components/common/FilterBar';
+import EmptyState from '../components/common/EmptyState';
 
 /**
  * Leads Page Component
@@ -33,23 +36,8 @@ const Leads = () => {
   const [viewMode, setViewMode] = useState('table');
 
   // State: Search & filter selectors
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
-  const [sourceFilter, setSourceFilter] = useState('All');
-
-  // Handle keyboard listener to close modal on Escape key press
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && isModalOpen) {
-        handleCloseModal();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen]);
-
-  const statuses = ['All', 'New', 'Contacted', 'Meeting Scheduled', 'Proposal Sent', 'Won', 'Lost'];
-  const sources = ['All', 'Website', 'Referral', 'LinkedIn', 'Cold Call', 'Email Campaign', 'Other'];
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState('All');
 
   /**
    * Action handler: Opens form in CREATE mode
@@ -75,6 +63,17 @@ const Leads = () => {
     setIsModalOpen(false);
     setSelectedLead(null);
   };
+
+  // Handle keyboard listener to close modal on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isModalOpen) {
+        handleCloseModal();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen]);
 
   /**
    * CRUD Coordinator: Handles both CREATE (new lead) and UPDATE (edit lead) saves
@@ -115,19 +114,14 @@ const Leads = () => {
     toast.error(`Removed lead: ${leadName}`);
   };
 
-  // Filter leads based on active search terms, status, and source selectors
-  const filteredLeads = leads.filter((lead) => {
-    const matchesSearch =
-      lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lead.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (lead.phone && lead.phone.includes(searchTerm));
-
-    const matchesStatus = statusFilter === 'All' || lead.status === statusFilter;
-    const matchesSource = sourceFilter === 'All' || lead.source === sourceFilter;
-
-    return matchesSearch && matchesStatus && matchesSource;
-  });
+  // Filter leads based on active filter and search query
+  const filteredLeads = leads
+    .filter((lead) => activeFilter === 'All' || lead.status === activeFilter)
+    .filter((lead) =>
+      lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lead.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lead.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -151,16 +145,7 @@ const Leads = () => {
       <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col gap-4">
         {/* Row 1: Search and Layout Toggles */}
         <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
-          <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 w-full md:max-w-md focus-within:ring-2 focus-within:ring-blue-500/15 focus-within:border-blue-500 transition-all">
-            <Search size={16} className="text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search name, company, email, phone..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-transparent border-none outline-none text-sm w-full text-slate-700 placeholder-slate-400"
-            />
-          </div>
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
           {/* Desktop ViewMode Switcher */}
           <div className="hidden lg:flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
@@ -191,94 +176,65 @@ const Leads = () => {
           </div>
         </div>
 
-        {/* Row 2: Status & Source filters */}
-        <div className="flex flex-col sm:flex-row gap-4 pt-2 border-t border-slate-50 text-xs font-semibold text-slate-500">
-          {/* Status Filters */}
-          <div className="flex flex-col gap-1.5 w-full">
-            <span className="text-slate-400 uppercase tracking-wider">Filter Stage:</span>
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-              {statuses.map((status) => (
-                <button
-                  key={status}
-                  onClick={() => setStatusFilter(status)}
-                  className={`px-3 py-1.5 rounded-lg border font-medium transition-all whitespace-nowrap cursor-pointer ${
-                    statusFilter === status
-                      ? 'bg-blue-50 border-blue-200 text-blue-600 shadow-sm'
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  {status}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Source Filters */}
-          <div className="flex flex-col gap-1.5 w-full">
-            <span className="text-slate-400 uppercase tracking-wider">Filter Source:</span>
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-              {sources.map((source) => (
-                <button
-                  key={source}
-                  onClick={() => setSourceFilter(source)}
-                  className={`px-3 py-1.5 rounded-lg border font-medium transition-all whitespace-nowrap cursor-pointer ${
-                    sourceFilter === source
-                      ? 'bg-purple-50 border-purple-200 text-purple-600 shadow-sm'
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  {source}
-                </button>
-              ))}
-            </div>
-          </div>
+        {/* Row 2: Status filters */}
+        <div className="pt-2 border-t border-slate-100">
+          <FilterBar
+            activeFilter={activeFilter}
+            onFilterChange={setActiveFilter}
+            leads={leads}
+          />
         </div>
       </div>
 
       {/* Main View Area: Responsive Layout Grid / Table */}
       <div>
-        {/* Mobile View: Cards stack in grid layout */}
-        <div className="block lg:hidden">
-          {filteredLeads.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredLeads.map((lead) => (
-                <LeadCard
-                  key={lead.id}
-                  lead={lead}
-                  onEdit={handleOpenEditModal}
-                  onDelete={handleDeleteLead}
-                />
-              ))}
+        {filteredLeads.length === 0 ? (
+          <EmptyState
+            totalCount={leads.length}
+            onClear={() => {
+              setSearchQuery('');
+              setActiveFilter('All');
+            }}
+          />
+        ) : (
+          <>
+            {/* Mobile View: Cards stack in grid layout */}
+            <div className="block lg:hidden">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {filteredLeads.map((lead) => (
+                  <LeadCard
+                    key={lead.id}
+                    lead={lead}
+                    onEdit={handleOpenEditModal}
+                    onDelete={handleDeleteLead}
+                  />
+                ))}
+              </div>
             </div>
-          ) : (
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-12 text-center text-slate-400">
-              <p className="text-base font-semibold">No active leads match your filters</p>
-              <p className="text-xs mt-1">Try resetting search keywords or status/source filters.</p>
-            </div>
-          )}
-        </div>
 
-        {/* Desktop View: Selectable between Card Grid or clean directory list Table */}
-        <div className="hidden lg:block">
-          {viewMode === 'table' ? (
-            <LeadTable
-              leads={filteredLeads}
-              onEdit={handleOpenEditModal}
-              onDelete={handleDeleteLead}
-            />
-          ) : (
-            <div className="grid grid-cols-3 gap-6">
-              {filteredLeads.map((lead) => (
-                <LeadCard
-                  key={lead.id}
-                  lead={lead}
+            {/* Desktop View: Selectable between Card Grid or clean directory list Table */}
+            <div className="hidden lg:block">
+              {viewMode === 'table' ? (
+                <LeadTable
+                  leads={filteredLeads}
                   onEdit={handleOpenEditModal}
                   onDelete={handleDeleteLead}
                 />
-              ))}
+              ) : (
+                <div className="grid grid-cols-3 gap-6">
+                  {filteredLeads.map((lead) => (
+                    <LeadCard
+                      key={lead.id}
+                      lead={lead}
+                      onEdit={handleOpenEditModal}
+                      onDelete={handleDeleteLead}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
 
       {/* Modal Popup Container containing LeadForm */}

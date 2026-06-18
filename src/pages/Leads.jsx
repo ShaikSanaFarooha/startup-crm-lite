@@ -7,6 +7,7 @@ import LeadTable from '../components/leads/LeadTable';
 import SearchBar from '../components/common/SearchBar';
 import FilterBar from '../components/common/FilterBar';
 import EmptyState from '../components/common/EmptyState';
+import { useLeads } from '../hooks/useLeads';
 
 /**
  * Leads Page Component
@@ -16,15 +17,8 @@ import EmptyState from '../components/common/EmptyState';
  * @returns {React.JSX.Element} The rendered Leads page.
  */
 const Leads = () => {
-  // State: List of active CRM leads
-  const [leads, setLeads] = useState([
-    { id: 1, name: 'Emma Watson', company: 'Hogwarts Inc', email: 'emma@hogwarts.edu', phone: '+1 555-0199', value: '$15,000', status: 'Won', source: 'Referral', date: '2026-06-12' },
-    { id: 2, name: 'John Doe', company: 'Global Tech', email: 'john@globaltech.com', phone: '+1 555-0123', value: '$8,200', status: 'Proposal Sent', source: 'Website', date: '2026-06-14' },
-    { id: 3, name: 'Alice Smith', company: 'Apex Labs', email: 'alice@apexlabs.org', phone: '+1 555-0145', value: '$22,500', status: 'New', source: 'LinkedIn', date: '2026-06-15' },
-    { id: 4, name: 'Bruce Wayne', company: 'Wayne Enterprises', email: 'bruce@wayne.com', phone: '+1 555-1939', value: '$120,000', status: 'Meeting Scheduled', source: 'Cold Call', date: '2026-06-01' },
-    { id: 5, name: 'Clara Oswald', company: 'Time Travelers Ltd', email: 'clara@tardis.co', phone: '+1 555-1100', value: '$4,800', status: 'Contacted', source: 'Email Campaign', date: '2026-06-10' },
-    { id: 6, name: 'Tony Stark', company: 'Stark Industries', email: 'tony@stark.com', phone: '+1 555-3000', value: '$95,000', status: 'Lost', source: 'Other', date: '2026-06-08' },
-  ]);
+  // Global context state for leads
+  const { leads, addLead, updateLead, deleteLead } = useLeads();
 
   // State: Modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,21 +75,12 @@ const Leads = () => {
    */
   const handleFormSubmit = (formData) => {
     if (selectedLead) {
-      // Update existing lead
-      setLeads((prevLeads) =>
-        prevLeads.map((lead) =>
-          lead.id === selectedLead.id ? { ...lead, ...formData } : lead
-        )
-      );
+      // Update existing lead using context
+      updateLead(selectedLead.id, formData);
       toast.success('Lead details updated successfully!');
     } else {
-      // Create new lead
-      const newLead = {
-        ...formData,
-        id: Date.now(),
-        date: new Date().toISOString().slice(0, 10)
-      };
-      setLeads((prevLeads) => [newLead, ...prevLeads]);
+      // Create new lead using context
+      addLead(formData);
       toast.success('New lead captured successfully!');
     }
     handleCloseModal();
@@ -106,11 +91,10 @@ const Leads = () => {
    * @param {number|string} leadId - The unique ID of the target lead.
    */
   const handleDeleteLead = (leadId) => {
-    // Find the lead name for a personalized notice
     const targetLead = leads.find((l) => l.id === leadId);
     const leadName = targetLead ? targetLead.name : 'Lead';
 
-    setLeads((prevLeads) => prevLeads.filter((lead) => lead.id !== leadId));
+    deleteLead(leadId);
     toast.error(`Removed lead: ${leadName}`);
   };
 
@@ -128,8 +112,8 @@ const Leads = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Leads Manager</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight transition-colors duration-205">Leads Manager</h2>
+          <p className="text-sm text-slate-500 dark:text-gray-400 transition-colors duration-205">
             Create, update, search, and organize CRM prospects throughout your sales pipeline.
           </p>
         </div>
@@ -142,19 +126,19 @@ const Leads = () => {
       </div>
 
       {/* Filter, Search, and Layout Toolbar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col gap-4">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-slate-200/80 dark:border-gray-700 shadow-sm flex flex-col gap-4 transition-colors duration-200">
         {/* Row 1: Search and Layout Toggles */}
         <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
-          {/* Desktop ViewMode Switcher */}
-          <div className="hidden lg:flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
+          {/* Tablet Hybrid ViewMode Switcher (hidden on mobile and desktop) */}
+          <div className="hidden md:flex lg:hidden items-center gap-1.5 bg-slate-100 dark:bg-gray-900 p-1 rounded-xl transition-colors duration-200">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+              className={`p-1.5 rounded-lg transition-all cursor-pointer min-w-[32px] min-h-[32px] flex items-center justify-center ${
                 viewMode === 'grid'
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? 'bg-white dark:bg-gray-850 text-blue-600 dark:text-blue-400 shadow-sm'
+                  : 'text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white'
               }`}
               title="Card Grid Mode"
               aria-label="Switch to Card Grid View"
@@ -163,10 +147,10 @@ const Leads = () => {
             </button>
             <button
               onClick={() => setViewMode('table')}
-              className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+              className={`p-1.5 rounded-lg transition-all cursor-pointer min-w-[32px] min-h-[32px] flex items-center justify-center ${
                 viewMode === 'table'
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? 'bg-white dark:bg-gray-850 text-blue-600 dark:text-blue-400 shadow-sm'
+                  : 'text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white'
               }`}
               title="Table Directory Mode"
               aria-label="Switch to Table View"
@@ -177,7 +161,7 @@ const Leads = () => {
         </div>
 
         {/* Row 2: Status filters */}
-        <div className="pt-2 border-t border-slate-100">
+        <div className="pt-2 border-t border-slate-100 dark:border-gray-750">
           <FilterBar
             activeFilter={activeFilter}
             onFilterChange={setActiveFilter}
@@ -198,9 +182,9 @@ const Leads = () => {
           />
         ) : (
           <>
-            {/* Mobile View: Cards stack in grid layout */}
-            <div className="block lg:hidden">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Mobile View: Cards stack in 1 column (visible on < md) */}
+            <div className="block md:hidden">
+              <div className="grid grid-cols-1 gap-6">
                 {filteredLeads.map((lead) => (
                   <LeadCard
                     key={lead.id}
@@ -212,8 +196,8 @@ const Leads = () => {
               </div>
             </div>
 
-            {/* Desktop View: Selectable between Card Grid or clean directory list Table */}
-            <div className="hidden lg:block">
+            {/* Tablet View: Toggleable hybrid (visible on md to lg) */}
+            <div className="hidden md:block lg:hidden">
               {viewMode === 'table' ? (
                 <LeadTable
                   leads={filteredLeads}
@@ -221,7 +205,7 @@ const Leads = () => {
                   onDelete={handleDeleteLead}
                 />
               ) : (
-                <div className="grid grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 gap-6">
                   {filteredLeads.map((lead) => (
                     <LeadCard
                       key={lead.id}
@@ -233,30 +217,39 @@ const Leads = () => {
                 </div>
               )}
             </div>
+
+            {/* Desktop View: Always Table View (visible on lg+) */}
+            <div className="hidden lg:block">
+              <LeadTable
+                leads={filteredLeads}
+                onEdit={handleOpenEditModal}
+                onDelete={handleDeleteLead}
+              />
+            </div>
           </>
         )}
       </div>
 
       {/* Modal Popup Container containing LeadForm */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-4">
           {/* Backdrop Overlay */}
           <div
-            className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300"
+            className="fixed inset-0 bg-slate-900/40 dark:bg-slate-950/60 backdrop-blur-sm transition-opacity duration-300"
             onClick={handleCloseModal}
             role="presentation"
           />
 
           {/* Modal Content Dialog */}
           <div
-            className="relative bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 z-10 overflow-y-auto max-h-[90vh] transition-all transform scale-100 duration-300 border border-slate-100"
+            className="relative w-full h-full md:h-auto md:max-w-lg bg-white dark:bg-gray-800 rounded-none md:rounded-2xl shadow-2xl p-6 z-10 overflow-y-auto max-h-screen md:max-h-[90vh] transition-all transform scale-100 duration-300 border-0 md:border border-slate-100 dark:border-gray-700"
             role="dialog"
             aria-modal="true"
           >
             {/* Close Button X Icon */}
             <button
               onClick={handleCloseModal}
-              className="absolute right-4 top-4 p-1 rounded-lg hover:bg-slate-50 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+              className="absolute right-4 top-4 p-1 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-700 text-slate-400 dark:text-gray-550 hover:text-slate-600 dark:hover:text-gray-300 transition-colors cursor-pointer"
               title="Close modal"
               aria-label="Close modal"
             >

@@ -42,7 +42,7 @@ const SearchBar = ({ value, onChange }) => {
 
   return (
     <div className="relative flex items-center w-full md:max-w-md">
-      <div className="absolute left-3.5 flex items-center pointer-events-none text-slate-400">
+      <div className="absolute left-3.5 flex items-center pointer-events-none text-slate-400 dark:text-gray-500">
         <Search size={18} />
       </div>
       <input
@@ -51,13 +51,13 @@ const SearchBar = ({ value, onChange }) => {
         onChange={(e) => setLocalValue(e.target.value)}
         placeholder="Search by name, company, or email..."
         aria-label="Search by name, company, or email"
-        className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-sm text-slate-700 placeholder-slate-400 outline-none focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-all duration-200"
+        className="w-full pl-10 pr-10 py-2.5 bg-slate-50 dark:bg-gray-900 border border-slate-200/80 dark:border-gray-700 rounded-xl text-sm text-slate-700 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-500 outline-none focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-all duration-200"
       />
       {localValue && (
         <button
           type="button"
           onClick={handleClear}
-          className="absolute right-3 p-1 rounded-lg hover:bg-slate-200/60 text-slate-400 hover:text-slate-600 transition-colors duration-150 cursor-pointer"
+          className="absolute right-3 p-1 rounded-lg hover:bg-slate-200/60 dark:hover:bg-gray-800 text-slate-400 dark:text-gray-500 hover:text-slate-600 dark:hover:text-gray-300 transition-colors duration-150 cursor-pointer"
           aria-label="Clear search text"
         >
           <X size={16} />

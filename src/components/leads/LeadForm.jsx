@@ -138,11 +138,11 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-      <div className="space-y-1 pb-2 border-b border-slate-100">
-        <h3 className="text-lg font-bold text-slate-950">
+      <div className="space-y-1 pb-2 border-b border-slate-100 dark:border-gray-700">
+        <h3 className="text-lg font-bold text-slate-950 dark:text-white">
           {isEditMode ? 'Edit Lead Profile' : 'Capture New Prospect'}
         </h3>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-slate-400 dark:text-gray-400">
           Fields marked with an asterisk (*) are mandatory.
         </p>
       </div>
@@ -150,7 +150,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Name Input */}
         <div className="space-y-1">
-          <label htmlFor="lead-name" className="text-xs font-semibold text-slate-600 block">
+          <label htmlFor="lead-name" className="text-xs font-semibold text-slate-600 dark:text-gray-300 block">
             Contact Name *
           </label>
           <input
@@ -160,10 +160,10 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
             value={formData.name}
             onChange={handleChange}
             placeholder="e.g. Sana Watson"
-            className={`w-full px-3.5 py-2 text-sm border rounded-xl outline-none transition-all ${
+            className={`w-full px-3.5 py-3 md:py-2 text-sm border rounded-xl outline-none transition-all min-h-[44px] md:min-h-0 ${
               errors.name
-                ? 'border-red-300 focus:ring-2 focus:ring-red-500/15 focus:border-red-500'
-                : 'border-slate-200 focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500'
+                ? 'border-red-300 dark:border-red-500 bg-white dark:bg-gray-800 text-slate-700 dark:text-white focus:ring-2 focus:ring-red-500/15 focus:border-red-500'
+                : 'border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500'
             }`}
           />
           {errors.name && <p className="text-xxs text-red-600 font-medium">{errors.name}</p>}
@@ -171,7 +171,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
 
         {/* Company Input */}
         <div className="space-y-1">
-          <label htmlFor="lead-company" className="text-xs font-semibold text-slate-600 block">
+          <label htmlFor="lead-company" className="text-xs font-semibold text-slate-600 dark:text-gray-300 block">
             Company Name *
           </label>
           <input
@@ -181,10 +181,10 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
             value={formData.company}
             onChange={handleChange}
             placeholder="e.g. Acme Corporation"
-            className={`w-full px-3.5 py-2 text-sm border rounded-xl outline-none transition-all ${
+            className={`w-full px-3.5 py-3 md:py-2 text-sm border rounded-xl outline-none transition-all min-h-[44px] md:min-h-0 ${
               errors.company
-                ? 'border-red-300 focus:ring-2 focus:ring-red-500/15 focus:border-red-500'
-                : 'border-slate-200 focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500'
+                ? 'border-red-300 dark:border-red-500 bg-white dark:bg-gray-800 text-slate-700 dark:text-white focus:ring-2 focus:ring-red-500/15 focus:border-red-500'
+                : 'border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500'
             }`}
           />
           {errors.company && (
@@ -194,7 +194,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
 
         {/* Email Input */}
         <div className="space-y-1">
-          <label htmlFor="lead-email" className="text-xs font-semibold text-slate-600 block">
+          <label htmlFor="lead-email" className="text-xs font-semibold text-slate-600 dark:text-gray-300 block">
             Email Address *
           </label>
           <input
@@ -204,10 +204,10 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
             value={formData.email}
             onChange={handleChange}
             placeholder="e.g. name@company.com"
-            className={`w-full px-3.5 py-2 text-sm border rounded-xl outline-none transition-all ${
+            className={`w-full px-3.5 py-3 md:py-2 text-sm border rounded-xl outline-none transition-all min-h-[44px] md:min-h-0 ${
               errors.email
-                ? 'border-red-300 focus:ring-2 focus:ring-red-500/15 focus:border-red-500'
-                : 'border-slate-200 focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500'
+                ? 'border-red-300 dark:border-red-500 bg-white dark:bg-gray-800 text-slate-700 dark:text-white focus:ring-2 focus:ring-red-500/15 focus:border-red-500'
+                : 'border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500'
             }`}
           />
           {errors.email && <p className="text-xxs text-red-600 font-medium">{errors.email}</p>}
@@ -215,7 +215,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
 
         {/* Phone Input */}
         <div className="space-y-1">
-          <label htmlFor="lead-phone" className="text-xs font-semibold text-slate-600 block">
+          <label htmlFor="lead-phone" className="text-xs font-semibold text-slate-600 dark:text-gray-300 block">
             Phone Number
           </label>
           <input
@@ -225,10 +225,10 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
             value={formData.phone}
             onChange={handleChange}
             placeholder="e.g. +1 (555) 012-3456"
-            className={`w-full px-3.5 py-2 text-sm border rounded-xl outline-none transition-all ${
+            className={`w-full px-3.5 py-3 md:py-2 text-sm border rounded-xl outline-none transition-all min-h-[44px] md:min-h-0 ${
               errors.phone
-                ? 'border-red-300 focus:ring-2 focus:ring-red-500/15 focus:border-red-500'
-                : 'border-slate-200 focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500'
+                ? 'border-red-300 dark:border-red-500 bg-white dark:bg-gray-800 text-slate-700 dark:text-white focus:ring-2 focus:ring-red-500/15 focus:border-red-500'
+                : 'border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500'
             }`}
           />
           {errors.phone && <p className="text-xxs text-red-600 font-medium">{errors.phone}</p>}
@@ -236,7 +236,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
 
         {/* Pipeline Stage Select */}
         <div className="space-y-1">
-          <label htmlFor="lead-status" className="text-xs font-semibold text-slate-600 block">
+          <label htmlFor="lead-status" className="text-xs font-semibold text-slate-600 dark:text-gray-300 block">
             Pipeline Stage
           </label>
           <select
@@ -244,10 +244,10 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl bg-white outline-none focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-all cursor-pointer"
+            className="w-full px-3.5 py-3 md:py-2 text-sm border border-slate-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-slate-750 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-all cursor-pointer min-h-[44px] md:min-h-0"
           >
             {statusOptions.map((opt) => (
-              <option key={opt} value={opt}>
+              <option key={opt} value={opt} className="dark:bg-gray-800">
                 {opt}
               </option>
             ))}
@@ -256,7 +256,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
 
         {/* Lead Source Select */}
         <div className="space-y-1">
-          <label htmlFor="lead-source" className="text-xs font-semibold text-slate-600 block">
+          <label htmlFor="lead-source" className="text-xs font-semibold text-slate-600 dark:text-gray-300 block">
             Lead Source
           </label>
           <select
@@ -264,10 +264,10 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
             name="source"
             value={formData.source}
             onChange={handleChange}
-            className="w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl bg-white outline-none focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-all cursor-pointer"
+            className="w-full px-3.5 py-3 md:py-2 text-sm border border-slate-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-slate-750 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-all cursor-pointer min-h-[44px] md:min-h-0"
           >
             {sourceOptions.map((opt) => (
-              <option key={opt} value={opt}>
+              <option key={opt} value={opt} className="dark:bg-gray-800">
                 {opt}
               </option>
             ))}
@@ -276,7 +276,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
 
         {/* Pipeline Value Input */}
         <div className="space-y-1 sm:col-span-2">
-          <label htmlFor="lead-value" className="text-xs font-semibold text-slate-600 block">
+          <label htmlFor="lead-value" className="text-xs font-semibold text-slate-600 dark:text-gray-300 block">
             Pipeline Estimated Value
           </label>
           <input
@@ -286,23 +286,23 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
             value={formData.value}
             onChange={handleChange}
             placeholder="e.g. $12,000"
-            className="w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-all"
+            className="w-full px-3.5 py-3 md:py-2 text-sm border border-slate-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-slate-700 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-all min-h-[44px] md:min-h-0"
           />
         </div>
       </div>
 
       {/* Buttons */}
-      <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+      <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-gray-700">
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50 border border-slate-200 rounded-xl transition-all cursor-pointer"
+          className="px-5 py-3 md:py-2 text-sm font-semibold text-slate-600 dark:text-gray-350 hover:bg-slate-50 dark:hover:bg-gray-700 border border-slate-200 dark:border-gray-700 rounded-xl transition-all cursor-pointer min-h-[44px] md:min-h-0 flex items-center justify-center"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-500/10 hover:shadow-lg transition-all cursor-pointer"
+          className="px-5 py-3 md:py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-500/10 hover:shadow-lg transition-all cursor-pointer min-h-[44px] md:min-h-0 flex items-center justify-center"
         >
           {isEditMode ? 'Save Changes' : 'Create Lead'}
         </button>

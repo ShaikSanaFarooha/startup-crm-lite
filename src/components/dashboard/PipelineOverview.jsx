@@ -5,8 +5,8 @@ import React from 'react';
  * @property {number|string} id - The lead identifier.
  * @property {string} name - Contact name.
  * @property {string} company - Company name.
- * @property {string} status - Pipeline status (New, Contacted, In Progress, Qualified).
- * @property {string} value - Deal value string (e.g., "$15,000").
+ * @property {string} status - Pipeline status.
+ * @property {string|number} value - Deal value string or number.
  * @property {string} date - Creation date.
  */
 
@@ -18,17 +18,26 @@ import React from 'react';
 /**
  * PipelineOverview Component
  * Renders a horizontal, multi-segmented progress bar showing the distribution
- * of leads across different stages of the sales pipeline, with interactive metrics.
+ * of leads across all stages of the sales pipeline, with interactive metrics.
  *
  * @param {PipelineOverviewProps} props - The component props.
  * @returns {React.JSX.Element} The rendered PipelineOverview component.
  */
 const PipelineOverview = ({ leads = [] }) => {
+  // Format currency helper
+  const formatCurrency = (val) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(val);
+  };
+
   // Safe handling of empty leads array
   if (!leads || leads.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-center items-center h-64">
-        <p className="text-sm text-slate-400 font-medium">No pipeline data available</p>
+      <div className="bg-white dark:bg-gray-800 border border-slate-200/80 dark:border-gray-700 p-6 shadow-sm flex flex-col justify-center items-center h-64 transition-colors duration-200">
+        <p className="text-sm text-slate-400 dark:text-gray-400 font-medium">No pipeline data available</p>
       </div>
     );
   }
@@ -37,31 +46,45 @@ const PipelineOverview = ({ leads = [] }) => {
   const statusConfig = {
     'New': {
       label: 'New',
-      color: '#2563EB', // Primary Blue
+      color: '#94A3B8',
+      bgClass: 'bg-slate-400',
+      textClass: 'text-slate-500',
+      badgeBg: 'bg-slate-50 border-slate-100 text-slate-600'
+    },
+    'Contacted': {
+      label: 'Contacted',
+      color: '#2563EB',
       bgClass: 'bg-blue-600',
       textClass: 'text-blue-600',
       badgeBg: 'bg-blue-50 border-blue-100 text-blue-700'
     },
-    'Contacted': {
-      label: 'Contacted',
-      color: '#8B5CF6', // Purple/Indigo
-      bgClass: 'bg-purple-600',
-      textClass: 'text-purple-600',
-      badgeBg: 'bg-purple-50 border-purple-100 text-purple-700'
-    },
-    'In Progress': {
-      label: 'In Progress',
-      color: '#F59E0B', // Warning Amber
+    'Meeting Scheduled': {
+      label: 'Meeting',
+      color: '#F59E0B',
       bgClass: 'bg-amber-500',
       textClass: 'text-amber-600',
       badgeBg: 'bg-amber-50 border-amber-100 text-amber-700'
     },
-    'Qualified': {
-      label: 'Qualified',
-      color: '#22C55E', // Success Green
+    'Proposal Sent': {
+      label: 'Proposal',
+      color: '#7C3AED',
+      bgClass: 'bg-purple-600',
+      textClass: 'text-purple-600',
+      badgeBg: 'bg-purple-50 border-purple-100 text-purple-700'
+    },
+    'Won': {
+      label: 'Won',
+      color: '#22C55E',
       bgClass: 'bg-green-500',
       textClass: 'text-green-600',
       badgeBg: 'bg-green-50 border-green-100 text-green-700'
+    },
+    'Lost': {
+      label: 'Lost',
+      color: '#EF4444',
+      bgClass: 'bg-red-500',
+      textClass: 'text-red-600',
+      badgeBg: 'bg-red-50 border-red-100 text-red-700'
     }
   };
 
@@ -100,24 +123,24 @@ const PipelineOverview = ({ leads = [] }) => {
   });
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-6">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200/80 dark:border-gray-700 p-6 shadow-sm space-y-6 transition-colors duration-200">
       {/* Title & Summary */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-gray-700 pb-4">
         <div>
-          <h3 className="font-bold text-slate-900 text-lg">Pipeline Overview</h3>
-          <p className="text-xs text-slate-400">Proportional distribution of active leads across stages</p>
+          <h3 className="font-bold text-slate-900 dark:text-white text-lg">Pipeline Overview</h3>
+          <p className="text-xs text-slate-400 dark:text-gray-450">Proportional distribution of active leads across stages</p>
         </div>
         <div className="text-left sm:text-right">
-          <div className="text-sm font-semibold text-slate-800">
-            Total Value: <span className="text-blue-600 font-bold">${totalValue.toLocaleString()}</span>
+          <div className="text-sm font-semibold text-slate-800 dark:text-gray-250">
+            Total Value: <span className="text-blue-600 dark:text-blue-400 font-bold">{formatCurrency(totalValue)}</span>
           </div>
-          <div className="text-xs text-slate-400">Across {totalLeads} active leads</div>
+          <div className="text-xs text-slate-400 dark:text-gray-450">Across {totalLeads} active leads</div>
         </div>
       </div>
 
       {/* Segmented Horizontal Bar Visualizer */}
       <div className="space-y-2">
-        <div className="flex h-5 w-full rounded-full overflow-hidden bg-slate-100 shadow-inner">
+        <div className="flex h-5 w-full rounded-full overflow-hidden bg-slate-100 dark:bg-gray-900 shadow-inner transition-colors duration-200">
           {segments.map((segment) => {
             if (segment.count === 0) return null;
             return (
@@ -136,7 +159,7 @@ const PipelineOverview = ({ leads = [] }) => {
       </div>
 
       {/* Grid Legend & Statistics Card Details */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 pt-2">
         {segments.map((segment) => {
           const hasLeads = segment.count > 0;
           return (
@@ -144,23 +167,23 @@ const PipelineOverview = ({ leads = [] }) => {
               key={segment.statusKey}
               className={`p-3 rounded-xl border transition-all duration-300 ${
                 hasLeads
-                  ? 'border-slate-100 bg-slate-50/50 hover:bg-white hover:border-slate-200 hover:shadow-sm'
-                  : 'border-slate-100/50 bg-transparent opacity-60'
+                  ? 'border-slate-100 dark:border-gray-700 bg-slate-50/50 dark:bg-gray-900/50 hover:bg-white dark:hover:bg-gray-800 hover:border-slate-200 dark:hover:border-gray-700 hover:shadow-sm'
+                  : 'border-slate-100/50 dark:border-gray-800/50 bg-transparent opacity-60'
               }`}
             >
               <div className="flex items-center gap-1.5 mb-1.5">
-                <span className={`w-2.5 h-2.5 rounded-full ${segment.bgClass}`} />
-                <span className="text-xs font-semibold text-slate-600">{segment.label}</span>
+                <span className={`w-2 h-2 rounded-full ${segment.bgClass}`} />
+                <span className="text-xs font-semibold text-slate-600 dark:text-gray-300">{segment.label}</span>
               </div>
               <div className="space-y-0.5">
-                <div className="text-lg font-bold text-slate-800 flex items-baseline gap-1">
+                <div className="text-lg font-bold text-slate-800 dark:text-gray-100 flex items-baseline gap-1">
                   {segment.count}
-                  <span className="text-xxs font-medium text-slate-400">
+                  <span className="text-xxs font-medium text-slate-400 dark:text-gray-500">
                     ({segment.percentage}%)
                   </span>
                 </div>
-                <div className="text-xs font-medium text-slate-500">
-                  ${segment.totalValue.toLocaleString()}
+                <div className="text-xs font-medium text-slate-500 dark:text-gray-400">
+                  {formatCurrency(segment.totalValue)}
                 </div>
               </div>
             </div>

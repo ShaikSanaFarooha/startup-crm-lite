@@ -26,23 +26,23 @@ const StatsCard = ({ title, value, icon: Icon, change, color }) => {
   // Map theme colors to specific Tailwind utility classes
   const colorMap = {
     primary: {
-      bg: 'bg-blue-50 text-blue-600',
-      border: 'border-blue-100',
+      bg: 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400',
+      border: 'border-blue-100 dark:border-blue-900/50',
       glow: 'shadow-blue-500/10'
     },
     success: {
-      bg: 'bg-green-50 text-green-600',
-      border: 'border-green-100',
+      bg: 'bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400',
+      border: 'border-green-100 dark:border-green-900/50',
       glow: 'shadow-green-500/10'
     },
     warning: {
-      bg: 'bg-amber-50 text-amber-600',
-      border: 'border-amber-100',
+      bg: 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400',
+      border: 'border-amber-100 dark:border-amber-900/50',
       glow: 'shadow-amber-500/10'
     },
     danger: {
-      bg: 'bg-red-50 text-red-600',
-      border: 'border-red-100',
+      bg: 'bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400',
+      border: 'border-red-100 dark:border-red-900/50',
       glow: 'shadow-red-500/10'
     }
   };
@@ -51,9 +51,9 @@ const StatsCard = ({ title, value, icon: Icon, change, color }) => {
   const activeColor = colorMap[color] || colorMap.primary;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md transition-all duration-300 group hover:-translate-y-0.5 flex flex-col justify-between">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200/80 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition-all duration-300 group hover:-translate-y-0.5 flex flex-col justify-between">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+        <span className="text-xs font-semibold text-slate-400 dark:text-gray-400 uppercase tracking-wider">
           {title}
         </span>
         {Icon && (
@@ -63,15 +63,15 @@ const StatsCard = ({ title, value, icon: Icon, change, color }) => {
         )}
       </div>
       <div className="mt-4">
-        <span className="text-3xl font-extrabold text-slate-900 tracking-tight block">
+        <span className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight block">
           {value}
         </span>
         <div className="flex items-center gap-1.5 mt-2 text-xs font-medium">
           <span
-            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${
+            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full border ${
               isNegative
-                ? 'bg-red-50 text-red-600 border border-red-100'
-                : 'bg-green-50 text-green-600 border border-green-100'
+                ? 'bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border-red-100 dark:border-red-900/50'
+                : 'bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 border-green-100 dark:border-green-900/50'
             }`}
           >
             {isNegative ? (
@@ -81,7 +81,7 @@ const StatsCard = ({ title, value, icon: Icon, change, color }) => {
             )}
             <span>{cleanChange}%</span>
           </span>
-          <span className="text-slate-400">vs last month</span>
+          <span className="text-slate-400 dark:text-slate-500">vs last month</span>
         </div>
       </div>
     </div>

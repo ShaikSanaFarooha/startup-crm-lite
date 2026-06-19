@@ -8,6 +8,8 @@ import RecentLeads from '../components/dashboard/RecentLeads';
 import QuickActions from '../components/dashboard/QuickActions';
 import LeadForm from '../components/leads/LeadForm';
 import { useLeads } from '../hooks/useLeads';
+import { useSettings } from '../context/SettingsContext';
+import { useNotification } from '../context/NotificationContext';
 import { parseLeadValue } from '../utils/analyticsHelpers';
 
 /**
@@ -20,15 +22,10 @@ import { parseLeadValue } from '../utils/analyticsHelpers';
 const Dashboard = () => {
   const navigate = useNavigate();
   const { leads, addLead } = useLeads();
+  const { userName, formatCurrency } = useSettings();
+  const { addNotification } = useNotification();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val);
-  };
 
   // Helper to parse lead creation date or fallback date
   const getLeadDate = (l) => new Date(l.createdAt || l.date || Date.now());
@@ -163,7 +160,7 @@ const Dashboard = () => {
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-semibold">
             <Award size={14} /> Startup CRM Lite Active
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Welcome back, Sana!</h2>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Welcome back, {userName}!</h2>
           <p className="text-slate-400 text-sm md:text-base leading-relaxed">
             Your CRM has captured new active leads today. Monitor pipeline metrics, coordinate sales tasks, and review performance targets.
           </p>
@@ -231,6 +228,7 @@ const Dashboard = () => {
                 addLead(formData);
                 setIsModalOpen(false);
                 toast.success('New lead captured successfully!');
+                addNotification(`New lead captured: ${formData.name} (${formData.company})`, 'success');
               }}
               onCancel={() => setIsModalOpen(false)}
             />

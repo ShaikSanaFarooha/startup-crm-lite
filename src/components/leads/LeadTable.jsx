@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pencil, Trash2, Mail, Phone, Calendar, Tag } from 'lucide-react';
 import StatusBadge from './StatusBadge';
+import { useSettings } from '../../context/SettingsContext';
 
 /**
  * @typedef {Object} Lead
@@ -31,6 +32,7 @@ import StatusBadge from './StatusBadge';
  * @returns {React.JSX.Element} The rendered LeadTable component.
  */
 const LeadTable = ({ leads = [], onEdit, onDelete }) => {
+  const { formatCurrency } = useSettings();
   if (leads.length === 0) {
     return (
       <div className="bg-white dark:bg-gray-800 border border-slate-200/80 dark:border-gray-700 p-12 text-center text-slate-400 dark:text-gray-500 rounded-2xl transition-colors duration-200">
@@ -82,7 +84,7 @@ const LeadTable = ({ leads = [], onEdit, onDelete }) => {
                     {lead.name}
                   </div>
                   {lead.value && (
-                    <div className="text-xs text-blue-600 dark:text-blue-400 font-bold mt-0.5">{lead.value}</div>
+                    <div className="text-xs text-blue-600 dark:text-blue-400 font-bold mt-0.5">{formatCurrency(lead.value)}</div>
                   )}
                 </td>
 

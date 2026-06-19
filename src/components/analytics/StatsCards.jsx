@@ -1,16 +1,10 @@
 import React from 'react';
 import { Users, Target, CircleDollarSign, Award, Clock, AlertOctagon, TrendingUp, TrendingDown } from 'lucide-react';
+import { useSettings } from '../../context/SettingsContext';
 
 export const StatsCards = ({ metrics }) => {
   const { current, growth } = metrics;
-
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val);
-  };
+  const { formatCurrency } = useSettings();
 
   const kpis = [
     {

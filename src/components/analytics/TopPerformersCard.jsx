@@ -1,14 +1,9 @@
 import React from 'react';
 import { Trophy, Award } from 'lucide-react';
+import { useSettings } from '../../context/SettingsContext';
 
 export const TopPerformersCard = ({ data }) => {
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val);
-  };
+  const { formatCurrency } = useSettings();
 
   // Find max revenue for relative progress bar scaling
   const maxRevenue = data.length > 0 ? data[0].revenue : 1;

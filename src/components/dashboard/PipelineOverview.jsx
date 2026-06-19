@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSettings } from '../../context/SettingsContext';
 
 /**
  * @typedef {Object} Lead
@@ -24,14 +25,7 @@ import React from 'react';
  * @returns {React.JSX.Element} The rendered PipelineOverview component.
  */
 const PipelineOverview = ({ leads = [] }) => {
-  // Format currency helper
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val);
-  };
+  const { formatCurrency } = useSettings();
 
   // Safe handling of empty leads array
   if (!leads || leads.length === 0) {

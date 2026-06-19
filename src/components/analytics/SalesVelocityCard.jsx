@@ -1,14 +1,9 @@
 import React from 'react';
 import { Zap, TrendingUp, TrendingDown } from 'lucide-react';
+import { useSettings } from '../../context/SettingsContext';
 
 export const SalesVelocityCard = ({ velocity, growth }) => {
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val);
-  };
+  const { formatCurrency } = useSettings();
 
   const isNeutral = growth === 0;
   const isPositive = growth > 0;

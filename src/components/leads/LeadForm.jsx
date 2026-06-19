@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSettings } from '../../context/SettingsContext';
 
 /**
  * @typedef {Object} Lead
@@ -9,7 +10,7 @@ import React, { useState, useEffect } from 'react';
  * @property {string} [phone] - Lead phone number.
  * @property {string} status - Pipeline stage.
  * @property {string} source - Lead acquisition source.
- * @property {string} [value] - Deal value (e.g. "$12,000").
+ * @property {string|number} [value] - Deal value (e.g. 12000).
  * @property {string} [date] - ISO/UTC date string when lead was added.
  */
 
@@ -29,6 +30,7 @@ import React, { useState, useEffect } from 'react';
  * @returns {React.JSX.Element} The rendered LeadForm component.
  */
 const LeadForm = ({ initialData, onSubmit, onCancel }) => {
+  const { getCurrencySymbol, parseNumericValue } = useSettings();
   const [formData, setFormData] = useState({
     name: '',
     company: '',
@@ -36,7 +38,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
     phone: '',
     status: 'New',
     source: 'Website',
-    value: '$0'
+    value: '0'
   });
 
   const [errors, setErrors] = useState({});
@@ -44,6 +46,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
   // Sync state with initial data if passed in (e.g., when editing)
   useEffect(() => {
     if (initialData) {
+      const valNum = parseNumericValue(initialData.value);
       setFormData({
         name: initialData.name || '',
         company: initialData.company || '',
@@ -51,7 +54,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
         phone: initialData.phone || '',
         status: initialData.status || 'New',
         source: initialData.source || 'Website',
-        value: initialData.value || '$0'
+        value: valNum ? valNum.toLocaleString() : '0'
       });
     }
   }, [initialData]);
@@ -116,12 +119,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
     }
 
     // Handle pipeline value formatting
-    let formattedValue = formData.value.trim();
-    if (formattedValue && !formattedValue.startsWith('$')) {
-      // Automatically prepends dollar sign if users enter clean numbers
-      const numeric = Number(formattedValue.replace(/[^0-9.-]+/g, '')) || 0;
-      formattedValue = `$${numeric.toLocaleString()}`;
-    }
+    const parsedValue = parseNumericValue(formData.value);
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -130,7 +128,7 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
 
     onSubmit({
       ...formData,
-      value: formattedValue || '$0'
+      value: parsedValue
     });
   };
 
@@ -277,17 +275,22 @@ const LeadForm = ({ initialData, onSubmit, onCancel }) => {
         {/* Pipeline Value Input */}
         <div className="space-y-1 sm:col-span-2">
           <label htmlFor="lead-value" className="text-xs font-semibold text-slate-600 dark:text-gray-300 block">
-            Pipeline Estimated Value
+            Pipeline Estimated Value ({getCurrencySymbol()})
           </label>
-          <input
-            id="lead-value"
-            type="text"
-            name="value"
-            value={formData.value}
-            onChange={handleChange}
-            placeholder="e.g. $12,000"
-            className="w-full px-3.5 py-3 md:py-2 text-sm border border-slate-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-slate-700 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-all min-h-[44px] md:min-h-0"
-          />
+          <div className="relative">
+            <span className="absolute left-3.5 top-3 md:top-2 text-slate-400 dark:text-gray-500 text-sm font-bold">
+              {getCurrencySymbol()}
+            </span>
+            <input
+              id="lead-value"
+              type="text"
+              name="value"
+              value={formData.value}
+              onChange={handleChange}
+              placeholder="0"
+              className="w-full pl-8 pr-3.5 py-3 md:py-2 text-sm border border-slate-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-slate-700 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-all min-h-[44px] md:min-h-0"
+            />
+          </div>
         </div>
       </div>
 

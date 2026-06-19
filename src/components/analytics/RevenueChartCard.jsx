@@ -2,17 +2,11 @@ import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { THEME_COLORS } from '../../constants/analyticsColors';
 import { useTheme } from '../../context/ThemeContext';
+import { useSettings } from '../../context/SettingsContext';
 
 export const RevenueChartCard = ({ data }) => {
   const { isDarkMode } = useTheme();
-
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val);
-  };
+  const { formatCurrency, getCurrencySymbol } = useSettings();
 
   // Custom Tooltip
   const CustomTooltip = ({ active, payload, label }) => {
@@ -68,7 +62,7 @@ export const RevenueChartCard = ({ data }) => {
                 tickLine={false}
                 axisLine={false}
                 tick={{ fill: isDarkMode ? '#94A3B8' : '#64748B', fontSize: 11, fontWeight: 600 }}
-                tickFormatter={(val) => `₹${(val / 1000).toFixed(0)}k`}
+                tickFormatter={(val) => `${getCurrencySymbol()}${(val / 1000).toFixed(0)}k`}
               />
               <Tooltip content={<CustomTooltip />} />
               <Area

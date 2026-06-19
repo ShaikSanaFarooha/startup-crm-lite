@@ -1,14 +1,9 @@
 import React from 'react';
 import { Sparkles, TrendingUp, ShieldAlert, Award } from 'lucide-react';
+import { useSettings } from '../../context/SettingsContext';
 
 export const ForecastCard = ({ forecastedRevenue, activeLeads, monthlyRevenues }) => {
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val);
-  };
+  const { formatCurrency } = useSettings();
 
   // Calculate dynamic confidence score:
   // Base 75%. If we have more than 10 leads in 'Proposal Sent' or 'Meeting Scheduled', confidence increases.

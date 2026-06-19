@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mail, Phone, Building2, Pencil, Trash2, Calendar, Tag } from 'lucide-react';
 import StatusBadge from './StatusBadge';
+import { useSettings } from '../../context/SettingsContext';
 
 /**
  * @typedef {Object} Lead
@@ -31,6 +32,7 @@ import StatusBadge from './StatusBadge';
  * @returns {React.JSX.Element} The rendered LeadCard component.
  */
 const LeadCard = ({ lead, onEdit, onDelete }) => {
+  const { formatCurrency } = useSettings();
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200/80 dark:border-gray-700 p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-4 group">
       {/* Top Header Section */}
@@ -49,7 +51,7 @@ const LeadCard = ({ lead, onEdit, onDelete }) => {
           {lead.value && (
             <>
               <span className="text-slate-300 dark:text-slate-650">•</span>
-              <span className="text-blue-600 dark:text-blue-400 font-bold">{lead.value}</span>
+              <span className="text-blue-600 dark:text-blue-400 font-bold">{formatCurrency(lead.value)}</span>
             </>
           )}
         </div>

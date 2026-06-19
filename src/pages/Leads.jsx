@@ -8,6 +8,7 @@ import SearchBar from '../components/common/SearchBar';
 import FilterBar from '../components/common/FilterBar';
 import EmptyState from '../components/common/EmptyState';
 import { useLeads } from '../hooks/useLeads';
+import { useNotification } from '../context/NotificationContext';
 
 /**
  * Leads Page Component
@@ -19,6 +20,7 @@ import { useLeads } from '../hooks/useLeads';
 const Leads = () => {
   // Global context state for leads
   const { leads, addLead, updateLead, deleteLead } = useLeads();
+  const { addNotification } = useNotification();
 
   // State: Modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,13 +77,20 @@ const Leads = () => {
    */
   const handleFormSubmit = (formData) => {
     if (selectedLead) {
-      // Update existing lead using context
+      // Check if status changed
+      const isStatusChanged = selectedLead.status !== formData.status;
       updateLead(selectedLead.id, formData);
       toast.success('Lead details updated successfully!');
+      if (isStatusChanged) {
+        addNotification(`Lead ${formData.name} (${formData.company}) status updated to ${formData.status}`, 'info');
+      } else {
+        addNotification(`Updated profile details for lead: ${formData.name}`, 'info');
+      }
     } else {
       // Create new lead using context
       addLead(formData);
       toast.success('New lead captured successfully!');
+      addNotification(`New lead captured: ${formData.name} (${formData.company})`, 'success');
     }
     handleCloseModal();
   };
@@ -93,9 +102,11 @@ const Leads = () => {
   const handleDeleteLead = (leadId) => {
     const targetLead = leads.find((l) => l.id === leadId);
     const leadName = targetLead ? targetLead.name : 'Lead';
+    const leadCompany = targetLead ? ` (${targetLead.company})` : '';
 
     deleteLead(leadId);
     toast.error(`Removed lead: ${leadName}`);
+    addNotification(`Deleted lead: ${leadName}${leadCompany}`, 'danger');
   };
 
   // Filter leads based on active filter and search query

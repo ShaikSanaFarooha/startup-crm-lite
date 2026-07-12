@@ -1,4 +1,4 @@
-import express from 'express';
+ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -140,12 +140,11 @@ const startServer = async () => {
   // Connect to database
   await connectDB();
 
-  const PORT = process.env.PORT || 5000;
-  const NODE_ENV = process.env.NODE_ENV || 'development';
+ const PORT = process.env.PORT || 5000;
 
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT} in ${NODE_ENV} mode`);
-  });
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});
 };
 
 startServer();

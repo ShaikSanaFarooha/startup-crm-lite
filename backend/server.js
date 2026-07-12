@@ -24,7 +24,7 @@ dotenv.config({ path: './.env file' });
  * Shuts down the process if any variables are missing.
  */
 const checkRequiredEnvVars = () => {
-  const required = ['MONGODB_URI', 'JWT_SECRET', 'PORT'];
+  const required = ['MONGODB_URI', 'JWT_SECRET'];
   const missing = required.filter((key) => !process.env[key]);
   
   if (missing.length > 0) {

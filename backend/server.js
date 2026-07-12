@@ -55,8 +55,9 @@ if (process.env.NODE_ENV === 'production') {
 
 // Configured CORS settings supporting dev defaults and production staging domains
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:5173',
-  'https://your-app.vercel.app',
+  process.env.FRONTEND_URL,
+  'https://startup-crm-lite-six.vercel.app',
+  'http://localhost:5173',
 ];
 
 const corsOptions = {

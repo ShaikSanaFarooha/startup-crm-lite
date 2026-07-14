@@ -38,6 +38,7 @@ const AppRoutes = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
+            <Route path="dashboard" element={<Navigate to="/" replace />} />
             <Route path="leads" element={<Leads />} />
             <Route path="analytics" element={<Analytics />} />
           </Route>

@@ -227,7 +227,6 @@ const Dashboard = () => {
               onSubmit={(formData) => {
                 addLead(formData);
                 setIsModalOpen(false);
-                toast.success('New lead captured successfully!');
                 addNotification(`New lead captured: ${formData.name} (${formData.company})`, 'success');
               }}
               onCancel={() => setIsModalOpen(false)}

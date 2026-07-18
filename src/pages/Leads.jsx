@@ -80,7 +80,6 @@ const Leads = () => {
       // Check if status changed
       const isStatusChanged = selectedLead.status !== formData.status;
       updateLead(selectedLead.id, formData);
-      toast.success('Lead details updated successfully!');
       if (isStatusChanged) {
         addNotification(`Lead ${formData.name} (${formData.company}) status updated to ${formData.status}`, 'info');
       } else {
@@ -89,7 +88,6 @@ const Leads = () => {
     } else {
       // Create new lead using context
       addLead(formData);
-      toast.success('New lead captured successfully!');
       addNotification(`New lead captured: ${formData.name} (${formData.company})`, 'success');
     }
     handleCloseModal();
@@ -105,7 +103,6 @@ const Leads = () => {
     const leadCompany = targetLead ? ` (${targetLead.company})` : '';
 
     deleteLead(leadId);
-    toast.error(`Removed lead: ${leadName}`);
     addNotification(`Deleted lead: ${leadName}${leadCompany}`, 'danger');
   };
 

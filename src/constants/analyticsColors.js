@@ -1,26 +1,26 @@
 export const STATUS_COLORS = {
-  New: "#94A3B8",
-  Contacted: "#2563EB",
-  Meeting: "#F59E0B",
-  Proposal: "#7C3AED",
-  Won: "#22C55E",
-  Lost: "#EF4444",
+  New: "var(--color-slate-400)",
+  Contacted: "var(--color-primary)",
+  Meeting: "var(--color-accent)",
+  Proposal: "var(--color-secondary)",
+  Won: "var(--color-success)",
+  Lost: "var(--color-danger)",
 };
 
 export const SOURCE_COLORS = {
-  Website: "#3B82F6",
-  Referral: "#6366F1",
-  LinkedIn: "#0A66C2",
-  Instagram: "#E1306C",
-  Ads: "#F59E0B",
-  'Cold Email': "#10B981",
-  Other: "#64748B",
+  Website: "var(--color-primary)",
+  Referral: "var(--color-indigo-400)",
+  LinkedIn: "var(--color-primary)",
+  Instagram: "var(--color-accent)",
+  Ads: "var(--color-accent)",
+  'Cold Email': "var(--color-secondary)",
+  Other: "var(--color-slate-400)",
 };
 
 export const THEME_COLORS = {
-  primary: "#2563EB",
-  success: "#22C55E",
-  warning: "#F59E0B",
-  danger: "#EF4444",
-  slate: "#64748B",
+  primary: "var(--color-primary)",
+  success: "var(--color-success)",
+  warning: "var(--color-warning)",
+  danger: "var(--color-danger)",
+  slate: "var(--color-slate-400)",
 };

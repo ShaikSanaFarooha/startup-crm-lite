@@ -23,6 +23,7 @@
   --brand-slate-500: #58A06D;
   --brand-slate-600: #385642;
   --brand-slate-700: #2F6A46; /* Primary Accent / Border */
+  --brand-slate-750: #1A2C22;
   --brand-slate-800: #18241D; /* Always-dark elements like Sidebar Hover & login card */
   --brand-slate-850: #E2ECE3;
   --brand-slate-900: #0F1813; /* Always-dark layouts like Sidebar & Login Background */
@@ -79,7 +80,7 @@
   --brand-border: #2D4236;
 
   /* Theme color remappings for utility classes */
-  --brand-white: #18241D; /* Dark Mode Surface */
+  --brand-white: #EEF8F0; /* Brand dark text color (light green-white) to keep text-white visible */
   --brand-slate-50: #0F1813; /* Dark Mode Background */
   --brand-slate-100: #223329;
   --brand-slate-200: #2D4236; /* Dark Mode Border */
@@ -88,6 +89,7 @@
   --brand-slate-500: #A5D8B2;
   --brand-slate-600: #84C697;
   --brand-slate-700: #72C38A; /* Primary Accent / Border */
+  --brand-slate-750: #EEF8F0;
   --brand-slate-800: #18241D;
   --brand-slate-850: #213027;
   --brand-slate-900: #0F1813;
@@ -159,6 +161,7 @@
   --color-slate-500: var(--brand-slate-500);
   --color-slate-600: var(--brand-slate-600);
   --color-slate-700: var(--brand-slate-700);
+  --color-slate-750: var(--brand-slate-750);
   --color-slate-800: var(--brand-slate-800);
   --color-slate-850: var(--brand-slate-850);
   --color-slate-900: var(--brand-slate-900);
